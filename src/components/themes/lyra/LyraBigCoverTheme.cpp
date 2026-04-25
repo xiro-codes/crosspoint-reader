@@ -44,7 +44,10 @@ void LyraBigCoverTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, co
         if (Storage.openFileForRead("HOME", coverBmpPath, file)) {
           Bitmap bitmap(file);
           if (bitmap.parseHeaders() == BmpReaderError::Ok) {
-            coverWidth = bitmap.getWidth();
+            float bmpHeight = static_cast<float>(bitmap.getHeight());
+            float bmpWidth = static_cast<float>(bitmap.getWidth());
+            float ratio = bmpWidth / bmpHeight;
+            coverWidth = LyraBigCoverMetrics::values.homeCoverTileHeight * ratio;
             renderer.drawBitmap(bitmap, tileX, tileY, coverWidth,
                                 LyraBigCoverMetrics::values.homeCoverTileHeight);
           } else {
@@ -74,8 +77,14 @@ void LyraBigCoverTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, co
     int textWidth = tileWidth - 2 * hPaddingInSelection - LyraBigCoverMetrics::values.verticalSpacing - coverWidth;
 
     if (bookSelected) {
-      renderer.fillRoundedRect(tileX + coverWidth, tileY, tileWidth - coverWidth, LyraBigCoverMetrics::values.homeCoverTileHeight, cornerRadius, false, true, false, true,
+      int selX = tileX + coverWidth;
+      int selW = tileWidth - coverWidth;
+      renderer.fillRoundedRect(selX, tileY, selW, hPaddingInSelection, cornerRadius, false, true, false, false,
                                Color::LightGray);
+      renderer.fillRectDither(selX, tileY + hPaddingInSelection, selW,
+                              LyraBigCoverMetrics::values.homeCoverTileHeight - 2 * hPaddingInSelection, Color::LightGray);
+      renderer.fillRoundedRect(selX, tileY + LyraBigCoverMetrics::values.homeCoverTileHeight - hPaddingInSelection, selW,
+                               hPaddingInSelection, cornerRadius, false, false, false, true, Color::LightGray);
     }
 
     auto titleLines = renderer.wrappedText(UI_12_FONT_ID, book.title.c_str(), textWidth, 3, EpdFontFamily::BOLD);

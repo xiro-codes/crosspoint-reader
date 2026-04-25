@@ -7,7 +7,7 @@ class GfxRenderer;
 namespace LyraBigCoverMetrics {
 constexpr ThemeMetrics values = [] {
   ThemeMetrics v = LyraMetrics::values;
-  v.homeCoverHeight = 360;
+  v.homeCoverHeight = 380;
   v.homeCoverTileHeight = 380;
   v.homeRecentBooksCount = 1;
   return v;
