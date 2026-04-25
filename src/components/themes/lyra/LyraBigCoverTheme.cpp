@@ -18,9 +18,10 @@ constexpr int hPaddingInSelection = 8;
 constexpr int cornerRadius = 6;
 }  // namespace
 
-void LyraBigCoverTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, const std::vector<RecentBook>& recentBooks,
-                                    const int selectorIndex, bool& coverRendered, bool& coverBufferStored,
-                                    bool& bufferRestored, std::function<bool()> storeCoverBuffer) const {
+void LyraBigCoverTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect,
+                                            const std::vector<RecentBook>& recentBooks, const int selectorIndex,
+                                            bool& coverRendered, bool& coverBufferStored, bool& bufferRestored,
+                                            std::function<bool()> storeCoverBuffer) const {
   const int tileWidth = rect.width - 2 * LyraBigCoverMetrics::values.contentSidePadding;
   const int tileHeight = rect.height;
   const int tileY = rect.y;
@@ -38,7 +39,8 @@ void LyraBigCoverTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, co
       if (coverPath.empty()) {
         hasCover = false;
       } else {
-        const std::string coverBmpPath = UITheme::getCoverThumbPath(coverPath, LyraBigCoverMetrics::values.homeCoverTileHeight);
+        const std::string coverBmpPath =
+            UITheme::getCoverThumbPath(coverPath, LyraBigCoverMetrics::values.homeCoverTileHeight);
 
         FsFile file;
         if (Storage.openFileForRead("HOME", coverBmpPath, file)) {
@@ -48,8 +50,7 @@ void LyraBigCoverTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, co
             float bmpWidth = static_cast<float>(bitmap.getWidth());
             float ratio = bmpWidth / bmpHeight;
             coverWidth = LyraBigCoverMetrics::values.homeCoverTileHeight * ratio;
-            renderer.drawBitmap(bitmap, tileX, tileY, coverWidth,
-                                LyraBigCoverMetrics::values.homeCoverTileHeight);
+            renderer.drawBitmap(bitmap, tileX, tileY, coverWidth, LyraBigCoverMetrics::values.homeCoverTileHeight);
           } else {
             hasCover = false;
           }
@@ -57,12 +58,10 @@ void LyraBigCoverTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, co
         }
       }
 
-      renderer.drawRect(tileX, tileY, coverWidth,
-                        LyraBigCoverMetrics::values.homeCoverTileHeight, true);
+      renderer.drawRect(tileX, tileY, coverWidth, LyraBigCoverMetrics::values.homeCoverTileHeight, true);
 
       if (!hasCover) {
-        renderer.fillRect(tileX,
-                          tileY + (LyraBigCoverMetrics::values.homeCoverTileHeight / 3), coverWidth,
+        renderer.fillRect(tileX, tileY + (LyraBigCoverMetrics::values.homeCoverTileHeight / 3), coverWidth,
                           2 * LyraBigCoverMetrics::values.homeCoverTileHeight / 3, true);
         renderer.drawIcon(CoverIcon, tileX + 24, tileY + 24, 32, 32);
       }
@@ -82,9 +81,10 @@ void LyraBigCoverTheme::drawRecentBookCover(GfxRenderer& renderer, Rect rect, co
       renderer.fillRoundedRect(selX, tileY, selW, hPaddingInSelection, cornerRadius, false, true, false, false,
                                Color::LightGray);
       renderer.fillRectDither(selX, tileY + hPaddingInSelection, selW,
-                              LyraBigCoverMetrics::values.homeCoverTileHeight - 2 * hPaddingInSelection, Color::LightGray);
-      renderer.fillRoundedRect(selX, tileY + LyraBigCoverMetrics::values.homeCoverTileHeight - hPaddingInSelection, selW,
-                               hPaddingInSelection, cornerRadius, false, false, false, true, Color::LightGray);
+                              LyraBigCoverMetrics::values.homeCoverTileHeight - 2 * hPaddingInSelection,
+                              Color::LightGray);
+      renderer.fillRoundedRect(selX, tileY + LyraBigCoverMetrics::values.homeCoverTileHeight - hPaddingInSelection,
+                               selW, hPaddingInSelection, cornerRadius, false, false, false, true, Color::LightGray);
     }
 
     auto titleLines = renderer.wrappedText(UI_12_FONT_ID, book.title.c_str(), textWidth, 3, EpdFontFamily::BOLD);
